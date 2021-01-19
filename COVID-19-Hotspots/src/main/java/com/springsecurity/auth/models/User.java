@@ -37,7 +37,22 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="record_id")
+    private OfficialRecord record;
+
+    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
+    private List<Location> locations;
+
     public User() {
+    }
+
+    public OfficialRecord getRecord() {
+        return record;
+    }
+
+    public void setRecord(OfficialRecord record) {
+        this.record = record;
     }
 
     public Long getId() {
@@ -46,6 +61,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 
     public String getFirstName() {
