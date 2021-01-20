@@ -34,34 +34,30 @@
                 <tr>
                     <td><c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/></td>
                     <td><c:out value="${user.username}"/></td>
-                    <c:choose>
-                        <c:when test="${user.roleFlag == 1}">
-                            <td>super</td>
-                        </c:when>
-                        <c:when test="${user.roleFlag == 2}">
-                            <td>admin | <a href="/destroy/${user.id}">delete</a></td>
-                        </c:when>
-                        <c:when test="${user.roleFlag == 3}">
-                            <td>tester | <a href="/destroy/${user.id}">delete</a></td>
-                        </c:when>
-                        <c:otherwise>
-                            <td>
-                                <form action="/super/updateRole/${user.id}" method="post">
-                                    <div class="form-group">
-                                        <label for="roles">update role</label>
-                                        <select class="form-select" id="roles" name="roleFlag">
-                                            <option value=2>Admin</option>
-                                            <option value=3>Tester</option>
-                                            <option value=4>User</option>
-                                        </select>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input class="btn btn-danger" type="submit" value="execute">
-                                    </div>
-                                </form>
-                                <a href="/destroy/${user.id}">delete</a>
-                            </td>
-                        </c:otherwise>
-                    </c:choose>
+                    <td>
+                        <form action="/super/updateRole/${user.id}" method="post">
+                            <div>
+                                <label for="roleUser">user role</label>
+                                <select class="form-select" id="roleUser" name="roleUser">
+                                    <option value=true>True</option>
+                                    <option value=false>False</option>
+                                </select>
+                                <label for="roleTester">tester role</label>
+                                <select class="form-select" id="roleTester" name="roleTester">
+                                    <option value=true>True</option>
+                                    <option value=false>False</option>
+                                </select>
+                                <label for="roleAdmin">admin role</label>
+                                <select class="form-select" id="roleAdmin" name="roleAdmin">
+                                    <option value=true>True</option>
+                                    <option value=false>False</option>
+                                </select>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <input class="btn btn-danger" type="submit" value="execute">
+                            </div>
+                        </form>
+                        <a href="/destroy/${user.id}">delete</a>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>

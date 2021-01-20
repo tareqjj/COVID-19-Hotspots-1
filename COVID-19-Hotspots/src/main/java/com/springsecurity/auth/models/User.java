@@ -25,10 +25,6 @@ public class User {
     @Transient
     private String passwordConfirmation;
     private Date lastSignIn;
-    @Min(0)
-    @Max(4)
-    @NotNull
-    private int roleFlag;
     @Column(updatable=false)
     private Date createdAt;
     private Date updatedAt;
@@ -103,14 +99,6 @@ public class User {
 
     public void setLastSignIn(Date lastSignIn) {
         this.lastSignIn = lastSignIn;
-    }
-
-    public int getRoleFlag() {
-        return roleFlag;
-    }
-
-    public void setRoleFlag(int roleFlag) {
-        this.roleFlag = roleFlag;
     }
 
     public Date getCreatedAt() {

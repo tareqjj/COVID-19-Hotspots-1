@@ -16,23 +16,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    public final String[] userRoles = {null, "ROLE_SUPER", "ROLE_ADMIN", "ROLE_TESTER", "ROLE_USER"};
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder)     {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-    public void saveUser(User user, int roleFlag) {
+    public void saveUser(User user, String role) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(roleRepository.findByName(userRoles[roleFlag]));
-        user.setRoleFlag(roleFlag);
-        userRepository.save(user);
-    }
-
-    public void updateUserRole(User user, int roleFlag) {
-        user.setRoles(roleRepository.findByName(userRoles[roleFlag]));
-        user.setRoleFlag(roleFlag);
+        user.setRoles(roleRepository.findByName(role));
         userRepository.save(user);
     }
 
@@ -41,13 +33,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-//    public void addUserRole(User user, int roleFlag) {
-//        List<Role> roleList = user.getRoles();
-//        roleList.addAll(roleRepository.findByName(userRoles[roleFlag]));
-//        user.setRoles(roleList);
-//        user.setRoleFlag(roleFlag);
-//        userRepository.save(user);
-//    }
+    public void addUserRole(User user, String role) {
+        List<Role> roleList = user.getRoles();
+        roleList.addAll(roleRepository.findByName(role));
+        user.setRoles(roleList);
+        userRepository.save(user);
+    }
+
+    public void removeUserRole(User user, String role) {
+        List<Role> roleList = user.getRoles();
+        roleList.removeAll(roleRepository.findByName(role));
+        user.setRoles(roleList);
+        userRepository.save(user);
+    }
 
     public List<User> allUsers() {
         return userRepository.findAll();
@@ -64,5 +62,13 @@ public class UserService {
 
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public List<Role> findRoleOfUser(User user) {
+        return roleRepository.findByUsersContains(user);
+    }
+
+    public List<Role> findRoleByName(String name) {
+        return roleRepository.findByName(name);
     }
 }

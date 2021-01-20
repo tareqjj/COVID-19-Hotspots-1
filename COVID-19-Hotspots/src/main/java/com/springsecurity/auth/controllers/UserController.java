@@ -28,9 +28,9 @@ public class UserController {
         if (result.hasErrors())
             return "loginRegistration.jsp";
         if (userService.allUsers().isEmpty())
-            userService.saveUser(user, 1);
+            userService.saveUser(user, "ROLE_SUPER");
         else
-            userService.saveUser(user, 4);
+            userService.saveUser(user, "ROLE_USER");
         return "redirect:/";
     }
 
@@ -48,7 +48,7 @@ public class UserController {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         userService.updateLastSignIn(loggedUser);
-        if (loggedUser.getRoleFlag() == 1)
+        if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_SUPER")))
             return "redirect:/super";
         return "redirect:/dashboard";
 
@@ -92,16 +92,30 @@ public class UserController {
     }
 
     @PostMapping("/super/updateRole/{user_id}")
-    public String updateRole(@PathVariable("user_id") Long user_id, @RequestParam("roleFlag") int roleFlag) {
+    public String updateRole(@PathVariable("user_id") Long user_id, @RequestParam("roleAdmin") boolean roleAdmin, @RequestParam("roleTester") boolean roleTester, @RequestParam("roleUser") boolean roleUser) {
         User user = userService.findUserById(user_id);
-        userService.updateUserRole(user, roleFlag);
+        if (roleUser) {
+            if (!user.getRoles().containsAll(userService.findRoleByName("ROLE_USER")))
+                userService.addUserRole(user, "ROLE_USER");
+        }
+        else
+            userService.removeUserRole(user, "ROLE_USER");
+
+        if (roleTester) {
+            if (!user.getRoles().containsAll(userService.findRoleByName("ROLE_TESTER")))
+                userService.addUserRole(user, "ROLE_TESTER");
+        }
+        else
+            userService.removeUserRole(user, "ROLE_TESTER");
+
+        if (roleAdmin) {
+            if (!user.getRoles().containsAll(userService.findRoleByName("ROLE_ADMIN")))
+                userService.addUserRole(user, "ROLE_ADMIN");
+        }
+        else
+            userService.removeUserRole(user, "ROLE_ADMIN");
+
         return "redirect:/super";
     }
-
-//    @PostMapping("/super/addRole/{user_id}")
-//    public String addRole(@PathVariable("user_id") Long user_id, @RequestParam("roleFlag") int roleFlag) {
-//        User user = userService.findUserById(user_id);
-//        userService.addUserRole(user, roleFlag);
-//    }
 
 }
