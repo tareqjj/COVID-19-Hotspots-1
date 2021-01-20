@@ -50,6 +50,10 @@ public class UserController {
         userService.updateLastSignIn(loggedUser);
         if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_SUPER")))
             return "redirect:/super";
+        if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_AGENT")))
+            return "redirect:/agent";
+        if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_TESTER")))
+            return "redirect:/tester";
         return "redirect:/dashboard";
 
     }
@@ -69,12 +73,12 @@ public class UserController {
         return "admin.jsp";
     }
 
-    @RequestMapping("/admin")
+    @RequestMapping("/agent")
     public String adminDashboard(Principal principal, Model model) {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
-        return "dashboard.jsp";
+        return "approval.jsp";
     }
 
     @RequestMapping("/tester")
@@ -82,7 +86,7 @@ public class UserController {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
-        return "dashboard.jsp";
+        return "results.jsp";
     }
 
     @RequestMapping("/destroy/{user_id}")
@@ -109,11 +113,11 @@ public class UserController {
             userService.removeUserRole(user, "ROLE_TESTER");
 
         if (roleAdmin) {
-            if (!user.getRoles().containsAll(userService.findRoleByName("ROLE_ADMIN")))
-                userService.addUserRole(user, "ROLE_ADMIN");
+            if (!user.getRoles().containsAll(userService.findRoleByName("ROLE_AGENT")))
+                userService.addUserRole(user, "ROLE_AGENT");
         }
         else
-            userService.removeUserRole(user, "ROLE_ADMIN");
+            userService.removeUserRole(user, "ROLE_AGENT");
 
         return "redirect:/super";
     }

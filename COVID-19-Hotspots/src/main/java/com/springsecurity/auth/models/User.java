@@ -39,8 +39,6 @@ public class User {
     @JoinColumn(name="record_id")
     private OfficialRecord record;
 
-    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
-    private List<Location> locations;
 
     public User() {
     }
@@ -133,13 +131,6 @@ public class User {
         this.record = record;
     }
 
-    public List<Location> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(List<Location> locations) {
-        this.locations = locations;
-    }
 
     @PrePersist
     protected void onCreate(){

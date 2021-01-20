@@ -3,6 +3,7 @@ package com.springsecurity.auth.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "tests")
@@ -11,8 +12,10 @@ public class Test {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double sample;
+
+    private Long sample;
     private String status;
+    private boolean result;
 
     @Column(updatable=false)
     private Date createdAt;
@@ -22,11 +25,22 @@ public class Test {
     @JoinColumn(name="record_id")
     private OfficialRecord record;
 
+    @OneToMany(mappedBy="test", fetch = FetchType.LAZY)
+    private List<Location> locations;
+
     public Test() {
     }
 
     public Test(String status) {
         this.status = status;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 
     public Long getId() {
@@ -37,11 +51,11 @@ public class Test {
         this.id = id;
     }
 
-    public Double getSample() {
+    public Long getSample() {
         return sample;
     }
 
-    public void setSample(Double sample) {
+    public void setSample(Long sample) {
         this.sample = sample;
     }
 
@@ -75,6 +89,14 @@ public class Test {
 
     public void setRecord(OfficialRecord record) {
         this.record = record;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
     }
 
     @PrePersist
