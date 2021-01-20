@@ -47,11 +47,11 @@
         </div>
         <div>
             <c:if test="${logoutMessage != null}">
-                <c:out value="${logoutMessage}"></c:out>
+                <c:out value="${logoutMessage}"/>
             </c:if>
             <h1>Login</h1>
             <c:if test="${errorMessage != null}">
-                <c:out value="${errorMessage}"></c:out>
+                <c:out value="${errorMessage}"/>
             </c:if>
             <form method="post" action="/login">
                 <p>

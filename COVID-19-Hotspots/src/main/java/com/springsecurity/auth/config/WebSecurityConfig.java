@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public WebSecurityConfig(@Qualifier("userDetailsServiceImplementation") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -30,7 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.
                 authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/registration").permitAll()
-                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/super/**").access("hasRole('SUPER')")
+                .antMatchers("/admin/**").access("hasRole('ADMIN') || hasRole('SUPER')")
+                .antMatchers("/tester/**").access("hasRole('TESTER') || hasRole('SUPER')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
