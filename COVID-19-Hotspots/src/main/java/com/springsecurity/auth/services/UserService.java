@@ -1,5 +1,6 @@
 package com.springsecurity.auth.services;
 
+import com.springsecurity.auth.models.Role;
 import com.springsecurity.auth.models.User;
 import com.springsecurity.auth.repositories.RoleRepository;
 import com.springsecurity.auth.repositories.UserRepository;
@@ -12,34 +13,26 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    public final String[] userRoles = {null, "ROLE_SUPER", "ROLE_ADMIN", "ROLE_TESTER", "ROLE_USER"};
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder)     {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
-
-    public void saveWithUserRole(User user) {
+    public void saveUser(User user, int roleFlag) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(roleRepository.findByName("ROLE_USER"));
-        user.setRoleFlag(false);
+        user.setRoles(roleRepository.findByName(userRoles[roleFlag]));
+        user.setRoleFlag(roleFlag);
         userRepository.save(user);
     }
 
-    public void saveUserWithAdminRole(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(roleRepository.findByName("ROLE_ADMIN"));
-        user.setRoleFlag(true);
-        userRepository.save(user);
-    }
-
-    public void updateUserWithAdminRole(User user) {
-        user.setRoles(roleRepository.findByName("ROLE_ADMIN"));
-        user.setRoleFlag(true);
+    public void updateUserRole(User user, int roleFlag) {
+        user.setRoles(roleRepository.findByName(userRoles[roleFlag]));
+        user.setRoleFlag(roleFlag);
         userRepository.save(user);
     }
 
@@ -48,6 +41,13 @@ public class UserService {
         userRepository.save(user);
     }
 
+//    public void addUserRole(User user, int roleFlag) {
+//        List<Role> roleList = user.getRoles();
+//        roleList.addAll(roleRepository.findByName(userRoles[roleFlag]));
+//        user.setRoles(roleList);
+//        user.setRoleFlag(roleFlag);
+//        userRepository.save(user);
+//    }
 
     public List<User> allUsers() {
         return userRepository.findAll();

@@ -35,11 +35,31 @@
                     <td><c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/></td>
                     <td><c:out value="${user.username}"/></td>
                     <c:choose>
-                        <c:when test="${user.roleFlag}">
-                            <td>admin</td>
+                        <c:when test="${user.roleFlag == 1}">
+                            <td>super</td>
+                        </c:when>
+                        <c:when test="${user.roleFlag == 2}">
+                            <td>admin | <a href="/destroy/${user.id}">delete</a></td>
+                        </c:when>
+                        <c:when test="${user.roleFlag == 3}">
+                            <td>tester | <a href="/destroy/${user.id}">delete</a></td>
                         </c:when>
                         <c:otherwise>
-                            <td><a href="/destroy/${user.id}">delete</a> <a href="/makeAdmin/${user.id}">make admin</a></td>
+                            <td>
+                                <form action="/super/updateRole/${user.id}" method="post">
+                                    <div class="form-group">
+                                        <label for="roles">update role</label>
+                                        <select class="form-select" id="roles" name="roleFlag">
+                                            <option value=2>Admin</option>
+                                            <option value=3>Tester</option>
+                                            <option value=4>User</option>
+                                        </select>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input class="btn btn-danger" type="submit" value="execute">
+                                    </div>
+                                </form>
+                                <a href="/destroy/${user.id}">delete</a>
+                            </td>
                         </c:otherwise>
                     </c:choose>
                 </tr>

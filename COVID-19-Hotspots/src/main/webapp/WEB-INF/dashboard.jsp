@@ -21,6 +21,7 @@
         </form>
     </header>
     <main>
+        <p>User Role: <c:out value="${loggedUser.roleFlag}"/></p>
         <p>First Name: <c:out value="${loggedUser.firstName}"/></p>
         <p>Last Name: <c:out value="${loggedUser.lastName}"/></p>
         <p>Email: <c:out value="${loggedUser.username}"/></p>

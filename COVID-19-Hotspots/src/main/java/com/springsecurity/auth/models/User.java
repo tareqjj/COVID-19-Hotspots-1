@@ -25,8 +25,10 @@ public class User {
     @Transient
     private String passwordConfirmation;
     private Date lastSignIn;
+    @Min(0)
+    @Max(4)
     @NotNull
-    private boolean roleFlag;
+    private int roleFlag;
     @Column(updatable=false)
     private Date createdAt;
     private Date updatedAt;
@@ -47,28 +49,12 @@ public class User {
     public User() {
     }
 
-    public OfficialRecord getRecord() {
-        return record;
-    }
-
-    public void setRecord(OfficialRecord record) {
-        this.record = record;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Location> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(List<Location> locations) {
-        this.locations = locations;
     }
 
     public String getFirstName() {
@@ -119,11 +105,11 @@ public class User {
         this.lastSignIn = lastSignIn;
     }
 
-    public boolean isRoleFlag() {
+    public int getRoleFlag() {
         return roleFlag;
     }
 
-    public void setRoleFlag(boolean roleFlag) {
+    public void setRoleFlag(int roleFlag) {
         this.roleFlag = roleFlag;
     }
 
@@ -149,6 +135,22 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public OfficialRecord getRecord() {
+        return record;
+    }
+
+    public void setRecord(OfficialRecord record) {
+        this.record = record;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 
     @PrePersist

@@ -14,8 +14,8 @@ import java.util.Date;
 
 @Controller
 public class UserController {
-    private UserService userService;
-    private UserValidator userValidator;
+    private final UserService userService;
+    private final UserValidator userValidator;
 
     public UserController(UserService userService, UserValidator userValidator) {
         this.userService = userService;
@@ -28,9 +28,9 @@ public class UserController {
         if (result.hasErrors())
             return "loginRegistration.jsp";
         if (userService.allUsers().isEmpty())
-            userService.saveUserWithAdminRole(user);
+            userService.saveUser(user, 1);
         else
-            userService.saveWithUserRole(user);
+            userService.saveUser(user, 4);
         return "redirect:/";
     }
 
@@ -43,43 +43,65 @@ public class UserController {
         return "loginRegistration.jsp";
     }
 
-
     @RequestMapping("/")
     public String routing(Principal principal) {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         userService.updateLastSignIn(loggedUser);
-        if (loggedUser.isRoleFlag())
-            return "redirect:/admin";
+        if (loggedUser.getRoleFlag() == 1)
+            return "redirect:/super";
         return "redirect:/dashboard";
 
     }
     @RequestMapping("/dashboard")
-    public String dashboard(Principal principal, Model model) {
+    public String userDashboard(Principal principal, Model model) {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
         return "dashboard.jsp";
     }
 
-    @RequestMapping(value = "/admin")
-    public String admin(Principal principal, Model model) {
+    @RequestMapping(value = "/super")
+    public String superDashboard(Principal principal, Model model) {
         String username = principal.getName();
         model.addAttribute("loggedUser", userService.findByUsername(username));
         model.addAttribute("allUsers", userService.allUsers());
         return "admin.jsp";
     }
 
+    @RequestMapping("/admin")
+    public String adminDashboard(Principal principal, Model model) {
+        String username = principal.getName();
+        User loggedUser = userService.findByUsername(username);
+        model.addAttribute("loggedUser", loggedUser);
+        return "dashboard.jsp";
+    }
+
+    @RequestMapping("/tester")
+    public String testerDashboard(Principal principal, Model model) {
+        String username = principal.getName();
+        User loggedUser = userService.findByUsername(username);
+        model.addAttribute("loggedUser", loggedUser);
+        return "dashboard.jsp";
+    }
+
     @RequestMapping("/destroy/{user_id}")
     public String destroy(@PathVariable("user_id") Long user_id) {
         userService.deleteUserById(user_id);
-        return "redirect:/admin";
+        return "redirect:/super";
     }
 
-    @RequestMapping("makeAdmin/{user_id}")
-    public String makeAdmin(@PathVariable("user_id") Long user_id) {
+    @PostMapping("/super/updateRole/{user_id}")
+    public String updateRole(@PathVariable("user_id") Long user_id, @RequestParam("roleFlag") int roleFlag) {
         User user = userService.findUserById(user_id);
-        userService.updateUserWithAdminRole(user);
-        return "redirect:/admin";
+        userService.updateUserRole(user, roleFlag);
+        return "redirect:/super";
     }
+
+//    @PostMapping("/super/addRole/{user_id}")
+//    public String addRole(@PathVariable("user_id") Long user_id, @RequestParam("roleFlag") int roleFlag) {
+//        User user = userService.findUserById(user_id);
+//        userService.addUserRole(user, roleFlag);
+//    }
+
 }
