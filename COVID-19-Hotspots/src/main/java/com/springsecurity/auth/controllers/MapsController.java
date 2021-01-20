@@ -2,22 +2,17 @@ package com.springsecurity.auth.controllers;
 
 
 import com.springsecurity.auth.models.Location;
-import com.springsecurity.auth.repositories.LocationRepository;
 import com.springsecurity.auth.services.MapsService;
-import net.bytebuddy.pool.TypePool;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.Map;
 
 @Controller
-public class MapsController {
+public class git addgit MapsController {
     private final MapsService mapsService;
 
     public MapsController(MapsService mapsService) {

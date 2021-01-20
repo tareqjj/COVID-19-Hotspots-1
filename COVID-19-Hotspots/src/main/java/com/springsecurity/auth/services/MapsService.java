@@ -21,7 +21,7 @@ public class MapsService {
     public List<Location> findAllLocations(){return locationRepository.findAll();}
     public Location createLocations(Location location, Long record_id){
         OfficialRecord record = recordRepository.findById(record_id).orElse(null);
-        location.setRecord(record);
+        location.getTest().setRecord(record);
         return locationRepository.save(location);
     }
 }
