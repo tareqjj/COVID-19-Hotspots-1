@@ -39,6 +39,9 @@ public class OfficialRecord {
     @OneToMany(mappedBy="record", fetch = FetchType.LAZY)
     private List<Test> tests;
 
+    @OneToMany(mappedBy="record", fetch = FetchType.LAZY)
+    private List<Location> locations;
+
     public OfficialRecord() {
     }
 
@@ -56,6 +59,14 @@ public class OfficialRecord {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = new Date();
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 
     public Long getId() {

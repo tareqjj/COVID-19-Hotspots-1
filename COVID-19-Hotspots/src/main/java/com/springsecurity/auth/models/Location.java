@@ -24,8 +24,8 @@ public class Location {
     private Date updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private User user;
+    @JoinColumn(name="record_id")
+    private OfficialRecord record;
 
     public Location() {
     }
@@ -43,12 +43,12 @@ public class Location {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public OfficialRecord getRecord() {
+        return record;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setRecord(OfficialRecord record) {
+        this.record = record;
     }
 
     public Double getLang() {
