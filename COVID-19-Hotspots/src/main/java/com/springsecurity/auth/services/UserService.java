@@ -1,5 +1,6 @@
 package com.springsecurity.auth.services;
 
+import com.springsecurity.auth.models.Role;
 import com.springsecurity.auth.models.User;
 import com.springsecurity.auth.repositories.RoleRepository;
 import com.springsecurity.auth.repositories.UserRepository;
@@ -12,34 +13,18 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder)     {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
-
-    public void saveWithUserRole(User user) {
+    public void saveUser(User user, String role) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(roleRepository.findByName("ROLE_USER"));
-        user.setRoleFlag(false);
-        userRepository.save(user);
-    }
-
-    public void saveUserWithAdminRole(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(roleRepository.findByName("ROLE_ADMIN"));
-        user.setRoleFlag(true);
-        userRepository.save(user);
-    }
-
-    public void updateUserWithAdminRole(User user) {
-        user.setRoles(roleRepository.findByName("ROLE_ADMIN"));
-        user.setRoleFlag(true);
+        user.setRoles(roleRepository.findByName(role));
         userRepository.save(user);
     }
 
@@ -48,6 +33,19 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void addUserRole(User user, String role) {
+        List<Role> roleList = user.getRoles();
+        roleList.addAll(roleRepository.findByName(role));
+        user.setRoles(roleList);
+        userRepository.save(user);
+    }
+
+    public void removeUserRole(User user, String role) {
+        List<Role> roleList = user.getRoles();
+        roleList.removeAll(roleRepository.findByName(role));
+        user.setRoles(roleList);
+        userRepository.save(user);
+    }
 
     public List<User> allUsers() {
         return userRepository.findAll();
@@ -64,5 +62,13 @@ public class UserService {
 
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public List<Role> findRoleOfUser(User user) {
+        return roleRepository.findByUsersContains(user);
+    }
+
+    public List<Role> findRoleByName(String name) {
+        return roleRepository.findByName(name);
     }
 }
