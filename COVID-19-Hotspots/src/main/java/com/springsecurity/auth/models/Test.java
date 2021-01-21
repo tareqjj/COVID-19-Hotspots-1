@@ -2,6 +2,7 @@ package com.springsecurity.auth.models;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Test {
 
     private Long sample;
     private String status;
-    private boolean result;
+    private String result;
 
     @Column(updatable=false)
     private Date createdAt;
@@ -91,11 +92,11 @@ public class Test {
         this.record = record;
     }
 
-    public boolean isResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(boolean result) {
+    public void setResult(String result) {
         this.result = result;
     }
 

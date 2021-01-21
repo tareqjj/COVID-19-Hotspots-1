@@ -49,8 +49,8 @@
                                 </select>
                                 <label for="roleAdmin">admin role</label>
                                 <select class="form-select" id="roleAdmin" name="roleAdmin">
-                                    <option value=true>True</option>
                                     <option value=false>False</option>
+                                    <option value=true>True</option>
                                 </select>
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <input class="btn btn-danger" type="submit" value="execute">
