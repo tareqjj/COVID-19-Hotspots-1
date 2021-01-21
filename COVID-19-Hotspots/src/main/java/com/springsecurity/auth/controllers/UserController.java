@@ -2,11 +2,11 @@ package com.springsecurity.auth.controllers;
 
 import com.springsecurity.auth.models.Test;
 import com.springsecurity.auth.models.User;
-import com.springsecurity.auth.repositories.TestRepository;
+
 import com.springsecurity.auth.services.TestService;
 import com.springsecurity.auth.services.UserService;
+import com.springsecurity.auth.validator.TestValidator;
 import com.springsecurity.auth.validator.UserValidator;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,18 +14,20 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Date;
+import java.util.List;
 
 @Controller
 public class UserController {
     private final UserService userService;
-    private final UserValidator userValidator;
     private final TestService testService;
+    private final UserValidator userValidator;
+    private final TestValidator testValidator;
 
-    public UserController(UserService userService, UserValidator userValidator, TestService testService) {
+    public UserController(UserService userService, TestService testService, UserValidator userValidator, TestValidator testValidator) {
         this.userService = userService;
-        this.userValidator = userValidator;
         this.testService = testService;
+        this.userValidator = userValidator;
+        this.testValidator = testValidator;
     }
 
     @PostMapping("/registration")
@@ -80,11 +82,51 @@ public class UserController {
     }
 
     @RequestMapping("/agent")
-    public String adminDashboard(Principal principal, Model model) {
+    public String agentDashboard(Principal principal, Model model) {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
+        List<Test> submitted = testService.findTestByStatus("Submitted");
+        model.addAttribute("submitted", submitted);
         return "approval.jsp";
+    }
+    @RequestMapping("/agent/tests/{test_id}")
+    public String testAproval(Principal principal, Model model, @PathVariable("test_id") Long test_id) {
+        String username = principal.getName();
+        User loggedUser = userService.findByUsername(username);
+        model.addAttribute("loggedUser", loggedUser);
+        Test test = testService.findTestById(test_id);
+//        List<Location> locations = test.getLocations();
+        model.addAttribute("test", test);
+//        model.addAttribute("locations", locations);
+        return "testSubmit.jsp";
+    }
+    @RequestMapping("/agent/search")
+    public String searchTestByRecord(@RequestParam("record_id") Long record_id, Model model) {
+        if (testService.findTestByRecordId(record_id) != null) {
+            List<Test> tests = testService.findTestByRecordId(record_id);
+            model.addAttribute("submitted", tests);
+            return "approval.jsp";
+        }
+        model.addAttribute("error", "No test found. Enter a valid sample test");
+        return "results.jsp";
+    }
+
+    @RequestMapping("/agent/tests/{test_id}/submit")
+    public String testSubmit(@PathVariable("test_id")Long test_id, @RequestParam("sample")Long sample, @Valid @ModelAttribute("test") Test test, BindingResult result,Model model) {
+        test.setSample(sample);
+        testValidator.validate(test, result);
+        if(result.hasErrors()){
+            model.addAttribute("test", test);
+            return "testSubmit.jsp";
+        }else{
+            Test test1 = testService.findTestById(test_id);
+            test1.setSample(sample);
+            test1.setStatus("Pending");
+            testService.creatTest(test1);
+            return "redirect:/agent";
+        }
+
     }
 
     @RequestMapping("/tester")
