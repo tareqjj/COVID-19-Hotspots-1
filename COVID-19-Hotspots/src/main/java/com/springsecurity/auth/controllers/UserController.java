@@ -50,7 +50,7 @@ public class UserController {
         return "loginRegistration.jsp";
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/auth")
     public String routing(Principal principal) {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
@@ -62,7 +62,10 @@ public class UserController {
         if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_TESTER")))
             return "redirect:/tester";
         return "redirect:/dashboard";
-
+    }
+    @RequestMapping("/")
+    public String home(){
+        return "redirect:/home";
     }
     @RequestMapping("/dashboard")
     public String userDashboard(Principal principal, Model model) {

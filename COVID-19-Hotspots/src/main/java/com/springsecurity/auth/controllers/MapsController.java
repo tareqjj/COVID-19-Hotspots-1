@@ -26,16 +26,8 @@ public class MapsController {
     @RequestMapping("heatMap")
     public String heatMap(Model model){
         List<Test> tests = testService.activePoints();
-//        ArrayList<Double[]> arr = new ArrayList<>();
-//        for (Location location: locations) {
-//            Double[] locat = new Double[2];
-//            locat[0] = location.getLang();
-//            locat[1] = location.getLat();
-//            arr.add(locat);
-//        }
-//        System.out.println(arr);
         model.addAttribute("tests", tests);
-        System.out.println(tests);
+//        System.out.println(tests);
         return "maps/Maps.jsp";
     }
 
@@ -43,6 +35,7 @@ public class MapsController {
     public String inputMap(){
         return "maps/InputMap.jsp";
     }
+
     @RequestMapping("/addTest")
     public String add(@RequestParam("locations[]") List<Double[]> locations, @RequestParam("id") Long id){
         Test test = new Test("Submitted");
@@ -52,5 +45,12 @@ public class MapsController {
             mapsService.createLocations(newLocation, id, test);
         }
         return "redirect:/inputMap";
+    }
+    @RequestMapping("/home")
+    public String home(Model model){
+        List<Test> tests = testService.activePoints();
+        model.addAttribute("tests", tests);
+//        System.out.println(tests);
+        return "home.jsp";
     }
 }

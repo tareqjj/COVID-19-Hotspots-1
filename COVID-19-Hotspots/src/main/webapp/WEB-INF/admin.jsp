@@ -34,26 +34,34 @@
                 <tr>
                     <td><c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/></td>
                     <td><c:out value="${user.username}"/></td>
-                    <td>
                         <form action="/super/updateRole/${user.id}" method="post">
                             <div>
-                                <label for="roleUser">user role</label>
-                                <select class="form-select" id="roleUser" name="roleUser">
-                                    <option value=true>True</option>
-                                    <option value=false>False</option>
-                                </select>
+<%--                                <td>--%>
+<%--                                <label for="roleUser">user role</label>--%>
+<%--                                <select class="form-select" id="roleUser" name="roleUser">--%>
+<%--                                    <option value=true>True</option>--%>
+<%--                                    <option value=false>False</option>--%>
+<%--                                </select>--%>
+<%--                                </td>--%>
+                                <td>
                                 <label for="roleTester">tester role</label>
                                 <select class="form-select" id="roleTester" name="roleTester">
-                                    <option value=true>True</option>
                                     <option value=false>False</option>
+                                    <option value=true>True</option>
                                 </select>
-                                <label for="roleAdmin">admin role</label>
+                                </td>
+                                <td>
+                                <label for="roleAdmin">Agent role</label>
                                 <select class="form-select" id="roleAdmin" name="roleAdmin">
                                     <option value=false>False</option>
                                     <option value=true>True</option>
                                 </select>
+                                </td>
+                                <td>
+                                    <div>.</div>
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <input class="btn btn-danger" type="submit" value="execute">
+
                             </div>
                         </form>
                         <a href="/destroy/${user.id}">delete</a>
