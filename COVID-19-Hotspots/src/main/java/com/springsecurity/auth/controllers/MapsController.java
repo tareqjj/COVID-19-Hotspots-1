@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-public class git addgit MapsController {
+public class MapsController {
     private final MapsService mapsService;
 
     public MapsController(MapsService mapsService) {

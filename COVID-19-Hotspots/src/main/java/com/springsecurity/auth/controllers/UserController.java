@@ -1,8 +1,12 @@
 package com.springsecurity.auth.controllers;
 
+import com.springsecurity.auth.models.Test;
 import com.springsecurity.auth.models.User;
+import com.springsecurity.auth.repositories.TestRepository;
+import com.springsecurity.auth.services.TestService;
 import com.springsecurity.auth.services.UserService;
 import com.springsecurity.auth.validator.UserValidator;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +20,12 @@ import java.util.Date;
 public class UserController {
     private final UserService userService;
     private final UserValidator userValidator;
+    private final TestService testService;
 
-    public UserController(UserService userService, UserValidator userValidator) {
+    public UserController(UserService userService, UserValidator userValidator, TestService testService) {
         this.userService = userService;
         this.userValidator = userValidator;
+        this.testService = testService;
     }
 
     @PostMapping("/registration")
@@ -86,7 +92,29 @@ public class UserController {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
+        model.addAttribute("allPendingTests", testService.findTestByStatus("Pending"));
         return "results.jsp";
+    }
+
+    @RequestMapping("/tester/search")
+    public String searchTestBySample(@RequestParam("sample_id") Long sample_id, Model model) {
+         if (testService.findTestBySample(sample_id) != null)
+            return "redirect:/tester/test/" + sample_id;
+         model.addAttribute("error", "No test found. Enter a valid sample number");
+         return "results.jsp";
+    }
+
+    @RequestMapping("/tester/test/{sample_id}")
+    public String displayTest(@PathVariable("sample_id") Long sample_id, Model model){
+        model.addAttribute("test", testService.findTestBySample(sample_id));
+        return "test.jsp";
+    }
+
+    @RequestMapping("/tester/test/result/{sample_id}")
+    public String setResult(@PathVariable("sample_id") Long sample_id, @RequestParam("testResult") String testResult) {
+        Test test = testService.findTestBySample(sample_id);
+        testService.setTestResult(test, testResult);
+        return "redirect:/tester/test/" + sample_id;
     }
 
     @RequestMapping("/destroy/{user_id}")
