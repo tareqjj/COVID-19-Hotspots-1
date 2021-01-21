@@ -2,7 +2,10 @@ package com.springsecurity.auth.controllers;
 
 
 import com.springsecurity.auth.models.Location;
+import com.springsecurity.auth.models.Test;
+import com.springsecurity.auth.repositories.TestRepository;
 import com.springsecurity.auth.services.MapsService;
+import com.springsecurity.auth.services.TestService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-public class git addgit MapsController {
+public class MapsController {
     private final MapsService mapsService;
+    private final TestService testService;
 
-    public MapsController(MapsService mapsService) {
+    public MapsController(MapsService mapsService, TestService testService) {
         this.mapsService = mapsService;
+        this.testService = testService;
     }
 
     @RequestMapping("heatMap")
@@ -40,12 +45,11 @@ public class git addgit MapsController {
     }
     @RequestMapping("/addTest")
     public String add(@RequestParam("locations[]") List<Double[]> locations, @RequestParam("id") Long id){
-        System.out.println("***************************************");
-        System.out.println(locations);
-        System.out.println(id);
+        Test test = new Test("Submitted");
+        testService.creatTest(test);
         for (Double[] location : locations) {
-            Location newLocation = new Location(location[0], location[1]) ;
-            mapsService.createLocations(newLocation, id);
+            Location newLocation = new Location(location[0], location[1]);
+            mapsService.createLocations(newLocation, id, test);
         }
         return "InputMap.jsp";
     }
