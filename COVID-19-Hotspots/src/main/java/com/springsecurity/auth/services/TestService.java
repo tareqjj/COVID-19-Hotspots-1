@@ -29,4 +29,9 @@ public class TestService {
         User user = userRepository.findById(user_id).orElse(null);
         return testRepository.findByRecordUser(user);
     }
+    public void setTestResult(Test test, String result) {
+        test.setResult(result);
+        test.setStatus("Done");
+        testRepository.save(test);
+    }
 }

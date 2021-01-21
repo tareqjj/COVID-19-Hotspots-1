@@ -1,8 +1,8 @@
 package com.springsecurity.auth.controllers;
 
-import com.springsecurity.auth.models.Location;
 import com.springsecurity.auth.models.Test;
 import com.springsecurity.auth.models.User;
+
 import com.springsecurity.auth.services.TestService;
 import com.springsecurity.auth.services.UserService;
 import com.springsecurity.auth.validator.TestValidator;
@@ -12,10 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.Binding;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -101,10 +99,10 @@ public class UserController {
 //        List<Location> locations = test.getLocations();
         model.addAttribute("test", test);
 //        model.addAttribute("locations", locations);
-        return "test.jsp";
+        return "testSubmit.jsp";
     }
     @RequestMapping("/agent/search")
-    public String searchTestBySample(@RequestParam("record_id") Long record_id, Model model) {
+    public String searchTestByRecord(@RequestParam("record_id") Long record_id, Model model) {
         if (testService.findTestByRecordId(record_id) != null) {
             List<Test> tests = testService.findTestByRecordId(record_id);
             model.addAttribute("submitted", tests);
@@ -120,7 +118,7 @@ public class UserController {
         testValidator.validate(test, result);
         if(result.hasErrors()){
             model.addAttribute("test", test);
-            return "test.jsp";
+            return "testSubmit.jsp";
         }else{
             Test test1 = testService.findTestById(test_id);
             test1.setSample(sample);
@@ -136,7 +134,29 @@ public class UserController {
         String username = principal.getName();
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
+        model.addAttribute("allPendingTests", testService.findTestByStatus("Pending"));
         return "results.jsp";
+    }
+
+    @RequestMapping("/tester/search")
+    public String searchTestBySample(@RequestParam("sample_id") Long sample_id, Model model) {
+         if (testService.findTestBySample(sample_id) != null)
+            return "redirect:/tester/test/" + sample_id;
+         model.addAttribute("error", "No test found. Enter a valid sample number");
+         return "results.jsp";
+    }
+
+    @RequestMapping("/tester/test/{sample_id}")
+    public String displayTest(@PathVariable("sample_id") Long sample_id, Model model){
+        model.addAttribute("test", testService.findTestBySample(sample_id));
+        return "test.jsp";
+    }
+
+    @RequestMapping("/tester/test/result/{sample_id}")
+    public String setResult(@PathVariable("sample_id") Long sample_id, @RequestParam("testResult") String testResult) {
+        Test test = testService.findTestBySample(sample_id);
+        testService.setTestResult(test, testResult);
+        return "redirect:/tester/test/" + sample_id;
     }
 
     @RequestMapping("/destroy/{user_id}")
