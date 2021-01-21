@@ -2,7 +2,6 @@ package com.springsecurity.auth.controllers;
 
 import com.springsecurity.auth.models.Test;
 import com.springsecurity.auth.models.User;
-
 import com.springsecurity.auth.services.TestService;
 import com.springsecurity.auth.services.UserService;
 import com.springsecurity.auth.validator.TestValidator;
@@ -149,7 +148,7 @@ public class UserController {
     @RequestMapping("/tester/test/{sample_id}")
     public String displayTest(@PathVariable("sample_id") Long sample_id, Model model){
         model.addAttribute("test", testService.findTestBySample(sample_id));
-        return "test.jsp";
+        return "testResult.jsp";
     }
 
     @RequestMapping("/tester/test/result/{sample_id}")
