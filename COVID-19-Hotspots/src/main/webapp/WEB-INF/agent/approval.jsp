@@ -14,6 +14,7 @@
 </head>
 <body>
 <div>
+    <p><c:out value="${error}"/></p>
     <form action="/agent/search">
         <label>ID Number: <input type="number" name="record_id"></label>
         <button type="submit">Search</button>
@@ -31,7 +32,7 @@
         <tbody>
         <c:forEach items="${submitted}" var="test">
             <tr>
-                <td><a href="agent/tests/${test.id}"><c:out value="${test.record.id}"/></a></td>
+                <td><a href="/agent/tests/${test.id}"><c:out value="${test.record.id}"/></a></td>
                 <td><c:out value="${test.record.first_name}"/></td>
                 <td><c:out value="${test.record.last_name}"/></td>
                 <td><c:out value="${test.status}"/></td>

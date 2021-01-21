@@ -12,7 +12,7 @@ public interface TestRepository extends CrudRepository<Test, Long> {
     List<Test> findAll();
     List<Test> findAllByStatus(String status);
     Test findBySample(Long sample);
-    List<Test> findByRecordIdAndStatusIs(Long id, String status);
+    List<Test> findAllByRecordIdIsAndStatusIs(Long id, String status);
     List<Test> findByRecordUser(User user);
     List<Test> findAllByResultIsAndEndDateAfter(String result, Date date);
 }

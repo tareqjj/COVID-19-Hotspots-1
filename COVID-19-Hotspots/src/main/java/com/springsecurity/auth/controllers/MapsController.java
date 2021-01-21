@@ -3,7 +3,6 @@ package com.springsecurity.auth.controllers;
 
 import com.springsecurity.auth.models.Location;
 import com.springsecurity.auth.models.Test;
-import com.springsecurity.auth.repositories.TestRepository;
 import com.springsecurity.auth.services.MapsService;
 import com.springsecurity.auth.services.TestService;
 import org.springframework.stereotype.Controller;
@@ -37,12 +36,12 @@ public class MapsController {
 //        System.out.println(arr);
         model.addAttribute("tests", tests);
         System.out.println(tests);
-        return "Maps.jsp";
+        return "maps/Maps.jsp";
     }
 
     @RequestMapping("/inputMap")
     public String inputMap(){
-        return "InputMap.jsp";
+        return "maps/InputMap.jsp";
     }
     @RequestMapping("/addTest")
     public String add(@RequestParam("locations[]") List<Double[]> locations, @RequestParam("id") Long id){

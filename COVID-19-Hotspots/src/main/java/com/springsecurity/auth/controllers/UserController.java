@@ -87,7 +87,7 @@ public class UserController {
         model.addAttribute("loggedUser", loggedUser);
         List<Test> submitted = testService.findTestByStatus("Submitted");
         model.addAttribute("submitted", submitted);
-        return "approval.jsp";
+        return "agent/approval.jsp";
     }
     @RequestMapping("/agent/tests/{test_id}")
     public String testAproval(Principal principal, Model model, @PathVariable("test_id") Long test_id) {
@@ -95,20 +95,18 @@ public class UserController {
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
         Test test = testService.findTestById(test_id);
-//        List<Location> locations = test.getLocations();
         model.addAttribute("test", test);
-//        model.addAttribute("locations", locations);
-        return "testSubmit.jsp";
+        return "agent/testSubmit.jsp";
     }
     @RequestMapping("/agent/search")
     public String searchTestByRecord(@RequestParam("record_id") Long record_id, Model model) {
-        if (testService.findTestByRecordId(record_id) != null) {
+        if (testService.findTestByRecordId(record_id).size() != 0) {
             List<Test> tests = testService.findTestByRecordId(record_id);
             model.addAttribute("submitted", tests);
-            return "approval.jsp";
+            return "agent/approval.jsp";
         }
-        model.addAttribute("error", "No test found. Enter a valid sample test");
-        return "results.jsp";
+        model.addAttribute("error", "No test found");
+        return "agent/approval.jsp";
     }
 
     @RequestMapping("/agent/tests/{test_id}/submit")
@@ -117,7 +115,7 @@ public class UserController {
         testValidator.validate(test, result);
         if(result.hasErrors()){
             model.addAttribute("test", test);
-            return "testSubmit.jsp";
+            return "agent/testSubmit.jsp";
         }else{
             Test test1 = testService.findTestById(test_id);
             test1.setSample(sample);
@@ -134,7 +132,7 @@ public class UserController {
         User loggedUser = userService.findByUsername(username);
         model.addAttribute("loggedUser", loggedUser);
         model.addAttribute("allPendingTests", testService.findTestByStatus("Pending"));
-        return "results.jsp";
+        return "tester/results.jsp";
     }
 
     @RequestMapping("/tester/search")
@@ -142,13 +140,13 @@ public class UserController {
          if (testService.findTestBySample(sample_id) != null)
             return "redirect:/tester/test/" + sample_id;
          model.addAttribute("error", "No test found");
-         return "results.jsp";
+         return "tester/results.jsp";
     }
 
     @RequestMapping("/tester/test/{sample_id}")
     public String displayTest(@PathVariable("sample_id") Long sample_id, Model model){
         model.addAttribute("test", testService.findTestBySample(sample_id));
-        return "testResult.jsp";
+        return "tester/testResult.jsp";
     }
 
     @RequestMapping("/tester/test/result/{sample_id}")

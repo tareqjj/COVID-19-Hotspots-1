@@ -37,7 +37,7 @@ public class TestService {
     public List<Test> allTests(){ return testRepository.findAll(); }
     public List<Test> findTestByStatus(String status){ return testRepository.findAllByStatus(status); }
     public Test findTestBySample(Long sample){ return testRepository.findBySample(sample); }
-    public List<Test> findTestByRecordId(Long record_id){ return testRepository.findByRecordIdAndStatusIs(record_id, "Pending"); }
+    public List<Test> findTestByRecordId(Long record_id){ return testRepository.findAllByRecordIdIsAndStatusIs(record_id, "Submitted"); }
     public List<Test> findTestByUser(Long user_id){
         User user = userRepository.findById(user_id).orElse(null);
         return testRepository.findByRecordUser(user);

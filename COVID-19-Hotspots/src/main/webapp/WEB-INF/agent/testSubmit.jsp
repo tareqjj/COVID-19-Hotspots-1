@@ -66,7 +66,7 @@
     function initMap() {
         const myLatLng = { lat: ${test.locations[0].lang}, lng: ${test.locations[0].lat} };
         const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 4,
+            zoom: 9,
             center: myLatLng,
         });
         <c:forEach items="${test.locations}" var="locat">
