@@ -61,12 +61,13 @@ public class UserController {
             return "redirect:/agent";
         if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_TESTER")))
             return "redirect:/tester";
-        return "redirect:/dashboard";
+        return "redirect:/home";
     }
     @RequestMapping("/")
     public String home(){
         return "redirect:/home";
     }
+
     @RequestMapping("/dashboard")
     public String userDashboard(Principal principal, Model model) {
         String username = principal.getName();
