@@ -3,27 +3,32 @@ package com.springsecurity.auth.controllers;
 
 import com.springsecurity.auth.models.Location;
 import com.springsecurity.auth.models.Test;
+import com.springsecurity.auth.models.User;
 import com.springsecurity.auth.services.MapsService;
 import com.springsecurity.auth.services.TestService;
+import com.springsecurity.auth.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class MapsController {
     private final MapsService mapsService;
     private final TestService testService;
+    private final UserService userService;
 
-    public MapsController(MapsService mapsService, TestService testService) {
+    public MapsController(MapsService mapsService, TestService testService, UserService userService) {
         this.mapsService = mapsService;
         this.testService = testService;
+        this.userService = userService;
     }
 
-    @RequestMapping("heatMap")
+    @RequestMapping("/heatMap")
     public String heatMap(Model model){
         List<Test> tests = testService.activePoints();
         model.addAttribute("tests", tests);
@@ -47,7 +52,12 @@ public class MapsController {
         return "redirect:/inputMap";
     }
     @RequestMapping("/home")
-    public String home(Model model){
+    public String home(Principal principal, Model model){
+        if (principal != null) {
+            String username = principal.getName();
+            User loggedUser = userService.findByUsername(username);
+            model.addAttribute("loggedUser", loggedUser);
+        }
         List<Test> tests = testService.activePoints();
         model.addAttribute("tests", tests);
 //        System.out.println(tests);
