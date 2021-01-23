@@ -36,13 +36,13 @@
                     <td><c:out value="${user.username}"/></td>
                         <form action="/super/updateRole/${user.id}" method="post">
                             <div>
-<%--                                <td>--%>
-<%--                                <label for="roleUser">user role</label>--%>
-<%--                                <select class="form-select" id="roleUser" name="roleUser">--%>
-<%--                                    <option value=true>True</option>--%>
-<%--                                    <option value=false>False</option>--%>
-<%--                                </select>--%>
-<%--                                </td>--%>
+                                <td>
+                                <label for="roleUser">user role</label>
+                                <select class="form-select" id="roleUser" name="roleUser">
+                                    <option value=true>True</option>
+                                    <option value=false>False</option>
+                                </select>
+                                </td>
                                 <td>
                                 <label for="roleTester">tester role</label>
                                 <select class="form-select" id="roleTester" name="roleTester">

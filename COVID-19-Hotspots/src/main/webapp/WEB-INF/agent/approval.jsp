@@ -45,7 +45,7 @@
                 <tbody>
                 <c:forEach items="${submitted}" var="test">
                     <tr>
-                        <td><a href="agent/tests/${test.id}"><c:out value="${test.record.id}"/></a></td>
+                        <td><a href="/agent/tests/${test.id}"><c:out value="${test.record.id}"/></a></td>
                         <td><c:out value="${test.record.first_name}"/></td>
                         <td><c:out value="${test.record.last_name}"/></td>
                         <td><c:out value="${test.status}"/></td>

@@ -13,6 +13,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOKLvcXGg9zCD2zSR6gjqsszAc1l017Tc&callback=initMap&libraries=visualization&v=weekly" defer></script>
     <!-- jsFiddle will insert css and js -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <style>
         #map {
             height: 100%;
@@ -43,15 +44,15 @@
 </head>
 <body>
 <div id="floating-panel">
-    <input onclick="clearMarkers();" type="button" value="Hide Markers" />
-    <input onclick="deleteMarker();" type="button" value="delete Marker" />
-    <input onclick="showMarkers();" type="button" value="Show All Markers" />
-    <input onclick="deleteMarkers();" type="button" value="Delete All" />
+    <input onclick="clearMarkers();" type="button" value="Hide Markers" class="btn btn-dark" />
+    <input onclick="deleteMarker();" type="button" value="delete Marker"  class="btn btn-dark"/>
+    <input onclick="showMarkers();" type="button" value="Show All Markers" class="btn btn-dark" />
+    <input onclick="deleteMarkers();" type="button" value="Delete All" class="btn btn-dark" />
+    <p>Please Mark your most frequented locations below:</p>
     <form action="/addTest" id="form">
-        <input type="number" name="id">
-        <button type="submit">Submit</button>
+        <label>Enter your Id#: <input type="number" name="id"></label>
+        <button type="submit" class="btn btn-dark">Submit</button>
     </form>
-
 </div>
 <div id="map"></div>
 <p>Click on the map to add markers.</p>

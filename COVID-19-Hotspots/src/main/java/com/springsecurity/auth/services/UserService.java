@@ -1,7 +1,9 @@
 package com.springsecurity.auth.services;
 
+import com.springsecurity.auth.models.OfficialRecord;
 import com.springsecurity.auth.models.Role;
 import com.springsecurity.auth.models.User;
+import com.springsecurity.auth.repositories.RecordRepository;
 import com.springsecurity.auth.repositories.RoleRepository;
 import com.springsecurity.auth.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,14 +17,19 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final RecordRepository recordRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder)     {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, RecordRepository recordRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.recordRepository = recordRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+
     public void saveUser(User user, String role) {
+        OfficialRecord record = recordRepository.findById(user.getIdNumber()).orElse(null);
+        user.setRecord(record);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(roleRepository.findByName(role));
         userRepository.save(user);

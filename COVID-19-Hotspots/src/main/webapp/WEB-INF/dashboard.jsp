@@ -37,9 +37,24 @@
         <p>Sign Up Date: <c:out value="${loggedUser.createdAt}"/></p>
         <p>Last Sign In: <c:out value="${loggedUser.lastSignIn}"/></p>
         <h2>Test Information</h2>
-        <p>Test Date: <c:out value="${loggedUser.record.tests.get(0).createdAt}"/></p>
-        <p>Test Status: <c:out value="${loggedUser.record.tests.get(0).status}"/></p>
-        <p>Test Result: <c:out value="${loggedUser.record.tests.get(0).result}"/></p>
+        <table class="table table-striped">
+            <thead class="thead-light">
+            <tr style="background-color: #5a5a5a;">
+                <th style= "color:white;">TestDate</th>
+                <th style= "color:white;">Status</th>
+                <th style= "color:white;">Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${loggedUser.record.tests}" var="test">
+                <tr>
+                    <td><c:out value="${test.createdAt}"/></td>
+                    <td><c:out value="${test.status}"/></td>
+                    <td><c:out value="${test.result}"/></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </main>
     <footer class="container">
         <p class="float-end"><a href="#">Back to top</a></p>
