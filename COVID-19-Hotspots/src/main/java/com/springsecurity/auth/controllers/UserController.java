@@ -38,7 +38,7 @@ public class UserController {
             userService.saveUser(user, "ROLE_SUPER");
         else
             userService.saveUser(user, "ROLE_USER");
-        return "redirect:/";
+        return "redirect:/auth";
     }
 
     @RequestMapping("/login")
@@ -57,14 +57,25 @@ public class UserController {
         userService.updateLastSignIn(loggedUser);
         if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_SUPER")))
             return "redirect:/super";
-        if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_AGENT")))
+        else if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_AGENT")))
             return "redirect:/agent";
-        if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_TESTER")))
+        else if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_TESTER")))
             return "redirect:/tester";
         return "redirect:/home";
     }
     @RequestMapping("/")
-    public String home(){
+    public String home(Principal principal){
+        if(principal != null){
+            String username = principal.getName();
+            User loggedUser = userService.findByUsername(username);
+            userService.updateLastSignIn(loggedUser);
+            if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_SUPER")))
+                return "redirect:/super";
+            else if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_AGENT")))
+                return "redirect:/agent";
+            else if (loggedUser.getRoles().containsAll(userService.findRoleByName("ROLE_TESTER")))
+                return "redirect:/tester";
+        }
         return "redirect:/home";
     }
 
@@ -128,6 +139,13 @@ public class UserController {
             return "redirect:/agent";
         }
 
+    }
+    @RequestMapping("/agent/tests/{test_id}/reject")
+    public String testReject(@PathVariable("test_id") Long test_id){
+        Test test = testService.findTestById(test_id);
+        test.setStatus("Rejected");
+        testService.creatTest(test);
+        return "redirect:/agent";
     }
 
     @RequestMapping("/tester")

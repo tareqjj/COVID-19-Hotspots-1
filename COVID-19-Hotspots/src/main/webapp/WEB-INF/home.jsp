@@ -46,30 +46,31 @@
     <link href="css/carousel.css" rel="stylesheet">
 </head>
 <body>
-<%--<script>--%>
-<%--    const url = 'https://www.corona.ps/API/summary';--%>
-<%--    async function getData() {--%>
-<%--        const response = await fetch(url);--%>
-<%--        const data = await response.json();--%>
-<%--        const {TotalCases, TotalRecovery, TotalActiveCases, TotalDeath, TotalCriticalCases, TotalTestedSamples}--%>
-<%--        document.getElementById('cases').textContent = TotalCases;--%>
-<%--        document.getElementById('recovery').textContent = TotalRecovery;--%>
-<%--        document.getElementById('active').textContent = TotalActiveCases;--%>
-<%--        document.getElementById('death').textContent = TotalDeath;--%>
-<%--        document.getElementById('critical').textContent = TotalCriticalCases;--%>
-<%--        document.getElementById('samples').textContent = TotalTestedSamples;--%>
-<%--    }--%>
-<%--    getData();--%>
-<%--</script>--%>
+<script>
+    const url = 'https://www.corona.ps/API/summary';
+    async function getData() {
+        const response = await fetch(url);
+        const data = await response.json();
+        const {TotalCases, TotalRecovery, TotalActiveCases, TotalDeath, TotalCriticalCases, TotalTestedSamples}=data;
+        console.log(data.data['TotalDeath'])
+        document.getElementById('cases').textContent = data.data['TotalCases'];
+        document.getElementById('recovery').textContent = data.data['TotalRecovery'];
+        document.getElementById('active').textContent = data.data['TotalActiveCases']  ;
+        document.getElementById('deaths').textContent = data.data['TotalDeath'] ;
+        document.getElementById('critical').textContent = data.data['TotalCriticalCases'] ;
+        document.getElementById('samples').textContent = data.data['TotalTestedSamples'] ;
+    }
+    getData();
+</script>
 
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/heatMap">Covid-19 Real Time Map</a>
+            <h1 class="navbar-brand">MOH Covid-19 Portal</h1>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-<%--            <div class="collapse navbar-collapse " id="navbarCollapse">--%>
+            <div class="collapse navbar-collapse " id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0 d-flex">
                     <li class="nav-item active">
                         <a class="nav-link" aria-current="page" href="/home">Home</a>
@@ -87,14 +88,15 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/dashboard">My Profile / Test Result</a>
                             </li>
+
                         </c:otherwise>
                     </c:choose>
                 </ul>
-<%--                <form class="d-flex">--%>
-<%--                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">--%>
-<%--                    <button class="btn btn-outline-success" type="submit">Search</button>--%>
-<%--                </form>--%>
-<%--            </div>--%>
+                <form  id="logoutForm" method="POST" action="/logout">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <input class="btn btn-outline-success my-2 my-sm-0" style= "background-color: #5a5a5a; color:white; margin-right: 10px" type="submit" value="Logout!" />
+                </form>
+            </div>
         </div>
     </nav>
 </header>
@@ -175,26 +177,34 @@
                 <table class="table">
                     <thead class="thead-light">
                     <tr style="background-color: #5a5a5a;">
-                        <th scope="col" style="color: white">#</th>
-                        <th scope="col" style="color: white"> Cases Status </th>
-                        <th scope="col" style="color: white">Number of Cases</th>
+                        <th class="text-light">Status</th>
+                        <th class="text-light">Total Number</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Total Cases</td>
-                        <td>Otto</td>
+                        <td>All Cases</td>
+                        <td> <span id="cases"></span> </td>
                     </tr>
                     <tr>
-                        <th scope="row">2</th>
-                        <td ><span id="cases"></span></td>
-                        <td>Thornton</td>
+                        <td class="text-success">Recovery</td>
+                        <td class="text-success"> <span id="recovery"></span> </td>
                     </tr>
                     <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
+                        <td>Active</td>
+                        <td> <span id="active"></span> </td>
+                    </tr>
+                    <tr>
+                        <td class="text-danger">Deaths</td>
+                        <td class="text-danger"> <span id="deaths"></span> </td>
+                    </tr>
+                    <tr>
+                        <td class="text-warning">Critical</td>
+                        <td class="text-warning"> <span id="critical"></span> </td>
+                    </tr>
+                    <tr>
+                        <td>Samples</td>
+                        <td> <span id="samples"></span> </td>
                     </tr>
                     </tbody>
                 </table>
@@ -208,7 +218,7 @@
                 <h2 class="featurette-heading">Live Stream World Wide Covid-19 Cases Number</h2>
             </div>
             <div class="col-md-5 order-md-1">
-                <iframe width="500" height="283" src="https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1" frameborder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="500" height="283" src="https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1&amp;mute=1" frameborder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
 

@@ -11,36 +11,79 @@
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <style>
         main{display: flex; justify-content: space-evenly; margin: 50px}
     </style>
     <title>Login and Registration</title>
+    <script>
+        $(document).ready(function (){
+            $('#password').on('keyup', function () {
+                if($('#password').val().toLowerCase() == $('#password').val() ||
+                    $('#password').val().length < 8 ||
+                    /^[a-zA-Z0-9]*$/.test($('#password').val()) == true){
+                    $('#message').html('Weak').css('color', 'red');
+                }else
+                    $('#message').html('Strong').css('color', 'green');
+            });
+            $('#confirm_password').on('keyup', function () {
+                if ($('#password').val() == $('#confirm_password').val()) {
+                    $('#message1').html('Matching').css('color', 'green');
+                } else
+                    $('#message1').html('Not Matching').css('color', 'red');
+            });
+            $('#Email').on('keyup',function (){
+                if(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test($('#Email').val()) == false) {
+                    $('#message2').html('Invalid Email').css('color', 'red');
+                }else
+                    $('#message2').html('Valid').css('color', 'green');
+            });
+            $('#idNumber').on('keyup',function (){
+                if(/^\d{9}$/.test($('#idNumber').val()) == false) {
+                    $('#message3').html('Invalid Id Number').css('color', 'red');
+                }else
+                    $('#message3').html('Valid').css('color', 'green');
+            });
+            $()
+        })
+    </script>
 </head>
 <body>
     <main>
         <div>
             <h1>Register</h1>
-            <p><form:errors path="user.*"/></p>
             <form:form method="POST" action="/registration" modelAttribute="user">
                 <p>
                     <form:label path="firstName" class="col-form-label">First Name:</form:label>
-                    <form:input path="firstName" class="form-control"/>
+                    <form:errors path="firstName" cssClass="text-danger"/>
+                    <form:input path="firstName" class="form-control" required="required"/>
                 </p>
                 <p>
                     <form:label path="lastName" class="col-form-label">Last Name:</form:label>
-                    <form:input path="lastName" class="form-control"/>
+                    <form:errors path="lastName" cssClass="text-danger"/>
+                    <form:input path="lastName" class="form-control" required="required"/>
                 </p>
                 <p>
                     <form:label path="username" class="col-form-label">Email:</form:label>
-                    <form:input type="username" path="username" class="form-control"/>
+                    <p id="message2"></p>
+                    <form:errors path="username" cssClass="text-danger"/>
+                    <form:input type="username" id="Email" path="username" class="form-control" required="required"/>
+                </p>
+                <p>
+                    <form:label path="idNumber" class="col-form-label">IdNumber:</form:label>
+                    <p id="message3"></p>
+                    <form:errors path="idNumber" cssClass="text-danger"/>
+                    <form:input type="username" path="idNumber" id="idNumber" class="form-control" required="required"/>
                 </p>
                 <p>
                     <form:label path="password" class="col-form-label">Password:</form:label>
-                    <form:password path="password" class="form-control"/>
+                    <p id="message"></p>
+                    <form:password path="password" id="password" class="form-control" required="required"/>
                 </p>
                 <p>
                     <form:label path="passwordConfirmation" class="col-form-label">Password Confirmation:</form:label>
-                    <form:password path="passwordConfirmation" class="form-control"/>
+                    <p id="message1"></p>
+                    <form:password path="passwordConfirmation" id="confirm_password" class="form-control" required="required"/>
                 </p>
                 <input type="submit" value="Register!" class="btn btn-success"/>
             </form:form>

@@ -28,13 +28,13 @@ public class MapsController {
         this.userService = userService;
     }
 
-    @RequestMapping("/heatMap")
-    public String heatMap(Model model){
-        List<Test> tests = testService.activePoints();
-        model.addAttribute("tests", tests);
-//        System.out.println(tests);
-        return "maps/Maps.jsp";
-    }
+//    @RequestMapping("/heatMap")
+//    public String heatMap(Model model){
+//        List<Test> tests = testService.activePoints();
+//        model.addAttribute("tests", tests);
+////        System.out.println(tests);
+//        return "maps/Maps.jsp";
+//    }
 
     @RequestMapping("/inputMap")
     public String inputMap(){
@@ -49,7 +49,7 @@ public class MapsController {
             Location newLocation = new Location(location[0], location[1]);
             mapsService.createLocations(newLocation, id, test);
         }
-        return "redirect:/inputMap";
+        return "redirect:/home";
     }
     @RequestMapping("/home")
     public String home(Principal principal, Model model){

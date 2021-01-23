@@ -20,6 +20,7 @@ public class User {
     @Email
     @NotBlank
     private String username;
+    private Long idNumber;
     @Size(min=5)
     private String password;
     @Transient
@@ -49,6 +50,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(Long idNumber) {
+        this.idNumber = idNumber;
     }
 
     public String getFirstName() {
@@ -140,4 +149,5 @@ public class User {
     protected void onUpdate(){
         this.updatedAt = new Date();
     }
+
 }
